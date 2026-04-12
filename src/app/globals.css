@@ -1,26 +1,65 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* BiblioTech — Design Tokens */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Paleta Parchment (bege/pergaminho) */
+  --color-parchment-50: #faf8f5;
+  --color-parchment-100: #f2ede4;
+  --color-parchment-200: #e4d9c8;
+  --color-parchment-300: #d3c0a0;
+  --color-parchment-400: #bda07a;
+  --color-parchment-500: #a8835a;
+  --color-parchment-600: #8c6b47;
+  --color-parchment-700: #735538;
+  --color-parchment-800: #54453c;
+  --color-parchment-900: #3a2f28;
+
+  /* Paleta Leather (terracota/couro) */
+  --color-leather-50: #fdf3ee;
+  --color-leather-100: #fae2d3;
+  --color-leather-200: #f5c4a7;
+  --color-leather-300: #ee9d74;
+  --color-leather-400: #e6743f;
+  --color-leather-500: #d95a22;
+  --color-leather-600: #c75426;
+  --color-leather-700: #a0401d;
+  --color-leather-800: #80331a;
+  --color-leather-900: #612718;
+
+  /* Paleta Gold (dourado) */
+  --color-gold-400: #d4b04a;
+  --color-gold-500: #c49a38;
+  --color-gold-600: #a87d28;
+
+  /* Paleta Ink (cinza azulado para texto) */
+  --color-ink-900: #1e2329;
+  --color-ink-700: #2d3540;
+  --color-ink-500: #4a5568;
+  --color-ink-300: #8896a8;
+
+  /* Tipografia */
+  --font-display: var(--font-cormorant);
+  --font-sans: var(--font-source-sans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Scrollbar customizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-parchment-100);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-parchment-400);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-parchment-500);
 }
 
+/* Base */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-parchment-50);
+  color: var(--color-ink-900);
+  font-family: var(--font-source-sans), system-ui, sans-serif;
 }

@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Genre {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  books       Book[]
+
+  @@map("genres")
+}
+
+model Book {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  author        String
+  description   String?  @db.Text
+  summary       String?  @db.Text
+  notes         String?  @db.Text
+  pages         Int?
+  publisher     String?
+  isbn          String?
+  year          Int?
+  coverUrl      String?
+  coverPublicId String?
+  isPublished   Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  genre         Genre    @relation(fields: [genreId], references: [id])
+  genreId       String
+
+  @@index([genreId])
+  @@index([title])
+  @@index([author])
+  @@map("books")
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  title     String
+  author    String?
+  genre     String?
+  notes     String?  @db.Text
+  priority  Priority @default(MEDIUM)
+  link      String?
+  coverUrl  String?
+  purchased Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("wishlist_items")
+}
