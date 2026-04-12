@@ -31,47 +31,71 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
-      {/* ── Painel esquerdo ─────────────────────────────── */}
-      <div className="hidden lg:flex lg:w-1/2 bg-[#141414] flex-col items-center justify-center p-12 text-white">
-        <div className="max-w-xs text-center space-y-6">
+    <div className="min-h-screen flex" style={{ backgroundColor: "#1a1d2e" }}>
+
+      {/* ── Painel esquerdo — logo ───────────────────────── */}
+      <div
+        className="hidden md:flex md:w-[42%] flex-col items-center justify-center p-12"
+        style={{ backgroundColor: "#1a1d2e" }}
+      >
+        <div className="text-center space-y-5">
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center">
-              <BookOpen className="w-8 h-8 text-white" />
+            <div
+              className="w-20 h-20 rounded-full flex items-center justify-center"
+              style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+            >
+              <BookOpen className="w-9 h-9 text-white" />
             </div>
           </div>
           <div>
-            <h1 className="text-4xl font-semibold tracking-tight">BiblioTech</h1>
-            <p className="text-white/50 text-sm mt-2 leading-relaxed">
-              Sua biblioteca teológica pessoal. Organizada, acessível e sempre com você.
+            <h1 className="text-3xl font-semibold text-white tracking-tight">
+              BiblioTech
+            </h1>
+            <p className="text-sm mt-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
+              Sua biblioteca teológica pessoal.
             </p>
           </div>
         </div>
       </div>
 
-      {/* ── Painel direito ──────────────────────────────── */}
-      <div className="flex-1 flex flex-col items-center justify-center bg-white px-8 py-12">
+      {/* ── Divisor ─────────────────────────────────────── */}
+      <div className="hidden md:block w-px self-stretch" style={{ backgroundColor: "rgba(255,255,255,0.07)" }} />
+
+      {/* ── Painel direito — formulário ─────────────────── */}
+      <div
+        className="flex-1 flex flex-col items-center justify-center px-8 py-12"
+        style={{ backgroundColor: "#22263a" }}
+      >
         {/* Logo mobile */}
-        <div className="lg:hidden flex items-center gap-2 mb-10">
-          <div className="w-8 h-8 bg-[#141414] rounded-lg flex items-center justify-center">
-            <BookOpen className="w-4 h-4 text-white" />
+        <div className="md:hidden flex flex-col items-center gap-3 mb-10">
+          <div
+            className="w-14 h-14 rounded-full flex items-center justify-center"
+            style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
+          >
+            <BookOpen className="w-6 h-6 text-white" />
           </div>
-          <span className="text-xl font-semibold text-ink-900">BiblioTech</span>
+          <span className="text-xl font-semibold text-white">BiblioTech</span>
         </div>
 
         <div className="w-full max-w-sm">
+          {/* Título */}
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold text-ink-900 tracking-tight">
-              Acessar
+            <h2 className="text-2xl font-semibold text-white tracking-tight">
+              Acessar Plataforma
             </h2>
-            <p className="text-ink-400 text-sm mt-1">
-              Entre com suas credenciais para continuar.
+            <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.45)" }}>
+              Bem-vindo(a) de volta! Faça login para continuar.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* E-mail */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-ink-700 mb-1.5">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium mb-1.5"
+                style={{ color: "rgba(255,255,255,0.75)" }}
+              >
                 E-mail
               </label>
               <input
@@ -81,12 +105,21 @@ export default function LoginPage() {
                 autoComplete="email"
                 required
                 placeholder="admin@bibliotech.com"
-                className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-parchment-200 bg-parchment-50 text-ink-900 placeholder:text-ink-300 focus:outline-none focus:ring-2 focus:ring-ink-900 focus:border-transparent transition"
+                className="w-full px-3.5 py-2.5 text-sm rounded-lg text-white placeholder:text-white/25 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                }}
               />
             </div>
 
+            {/* Senha */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-ink-700 mb-1.5">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium mb-1.5"
+                style={{ color: "rgba(255,255,255,0.75)" }}
+              >
                 Senha
               </label>
               <input
@@ -96,14 +129,22 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 required
                 placeholder="••••••••"
-                className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-parchment-200 bg-parchment-50 text-ink-900 placeholder:text-ink-300 focus:outline-none focus:ring-2 focus:ring-ink-900 focus:border-transparent transition"
+                className="w-full px-3.5 py-2.5 text-sm rounded-lg text-white placeholder:text-white/25 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                }}
               />
             </div>
 
+            {/* Botão */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-[#141414] hover:bg-[#2a2a2a] disabled:opacity-50 text-white text-sm font-medium py-2.5 rounded-lg transition mt-2"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium text-white transition disabled:opacity-50 mt-1"
+              style={{ backgroundColor: "#3b74f5" }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#2d63e0")}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#3b74f5")}
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               {loading ? "Entrando…" : "Entrar"}
