@@ -1,5 +1,6 @@
 "use client";
 
+import { useTransition } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import type { GenreWithCount } from "@/types";
 
@@ -11,16 +12,21 @@ export function BookFilters({ genres }: BookFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [, startTransition] = useTransition();
+
   const activeGenre = searchParams.get("genre") ?? "";
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    const params = new URLSearchParams(searchParams.toString());
-    if (e.target.value) {
-      params.set("genre", e.target.value);
-    } else {
-      params.delete("genre");
-    }
-    router.replace(`${pathname}?${params.toString()}`);
+    const value = e.target.value;
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value) {
+        params.set("genre", value);
+      } else {
+        params.delete("genre");
+      }
+      router.replace(`${pathname}?${params.toString()}`);
+    });
   }
 
   return (

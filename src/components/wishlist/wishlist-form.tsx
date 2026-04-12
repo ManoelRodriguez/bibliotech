@@ -24,20 +24,10 @@ export function WishlistForm({ action, item, onSuccess }: WishlistFormProps) {
   const [state, formAction, isPending] = useActionState(action, {});
 
   useEffect(() => {
-    if (!isPending && !state.error && Object.keys(state).length === 0 && item === undefined) return;
-    if (!isPending && !state.error && Object.keys(state).length === 0) {
+    if (state.success) {
       onSuccess();
     }
-  }, [isPending, state, onSuccess, item]);
-
-  // fecha quando salvar com sucesso
-  useEffect(() => {
-    if (!isPending && state && !state.error) {
-      const isFirstRender = Object.keys(state).length === 0;
-      if (!isFirstRender) onSuccess();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPending]);
+  }, [state.success, onSuccess]);
 
   return (
     <form action={formAction} className="space-y-4">

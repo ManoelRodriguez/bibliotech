@@ -6,7 +6,7 @@ import { wishlistSchema } from "@/lib/validations/wishlist";
 import { revalidatePath } from "next/cache";
 import type { WishlistItem } from "@prisma/client";
 
-export type WishlistActionState = { error?: string };
+export type WishlistActionState = { error?: string; success?: boolean };
 
 const priorityOrder = { HIGH: 0, MEDIUM: 1, LOW: 2 } as const;
 
@@ -57,7 +57,7 @@ export async function createWishlistItem(
   });
 
   revalidatePath("/admin/wishlist");
-  return {};
+  return { success: true };
 }
 
 export async function updateWishlistItem(
@@ -98,7 +98,7 @@ export async function updateWishlistItem(
   });
 
   revalidatePath("/admin/wishlist");
-  return {};
+  return { success: true };
 }
 
 export async function toggleWishlistPurchased(
