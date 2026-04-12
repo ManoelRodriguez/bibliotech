@@ -25,7 +25,7 @@ export function BookCard({ book }: BookCardProps) {
             <BookOpen className="w-8 h-8 text-parchment-500" />
             <p
               className="text-center text-xs font-medium text-parchment-700 line-clamp-3 leading-snug"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+             
             >
               {book.title}
             </p>
@@ -44,7 +44,7 @@ export function BookCard({ book }: BookCardProps) {
       <div className="mt-3 space-y-0.5">
         <h3
           className="text-sm font-semibold text-ink-900 line-clamp-2 leading-snug group-hover:text-leather-700 transition-colors"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+         
         >
           {book.title}
         </h3>

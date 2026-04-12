@@ -2,64 +2,52 @@
 
 /* BiblioTech — Design Tokens */
 @theme inline {
-  /* Paleta Parchment (bege/pergaminho) */
-  --color-parchment-50: #faf8f5;
-  --color-parchment-100: #f2ede4;
-  --color-parchment-200: #e4d9c8;
-  --color-parchment-300: #d3c0a0;
-  --color-parchment-400: #bda07a;
-  --color-parchment-500: #a8835a;
-  --color-parchment-600: #8c6b47;
-  --color-parchment-700: #735538;
-  --color-parchment-800: #54453c;
-  --color-parchment-900: #3a2f28;
+  /* Paleta de superfícies (cinzas neutros) */
+  --color-parchment-50:  #f9f9f9;
+  --color-parchment-100: #f3f3f3;
+  --color-parchment-200: #e8e8e8;
+  --color-parchment-300: #d4d4d4;
+  --color-parchment-400: #a3a3a3;
+  --color-parchment-500: #737373;
+  --color-parchment-600: #525252;
+  --color-parchment-700: #404040;
+  --color-parchment-800: #262626;
+  --color-parchment-900: #171717;
 
-  /* Paleta Leather (terracota/couro) */
-  --color-leather-50: #fdf3ee;
-  --color-leather-100: #fae2d3;
-  --color-leather-200: #f5c4a7;
-  --color-leather-300: #ee9d74;
-  --color-leather-400: #e6743f;
-  --color-leather-500: #d95a22;
-  --color-leather-600: #c75426;
-  --color-leather-700: #a0401d;
-  --color-leather-800: #80331a;
-  --color-leather-900: #612718;
+  /* Paleta primária (charcoal/quase preto) */
+  --color-leather-50:  #f5f5f5;
+  --color-leather-100: #ebebeb;
+  --color-leather-200: #d6d6d6;
+  --color-leather-300: #b0b0b0;
+  --color-leather-400: #7a7a7a;
+  --color-leather-500: #525252;
+  --color-leather-600: #1f1f1f;
+  --color-leather-700: #141414;
+  --color-leather-800: #0a0a0a;
+  --color-leather-900: #050505;
 
-  /* Paleta Gold (dourado) */
-  --color-gold-400: #d4b04a;
-  --color-gold-500: #c49a38;
-  --color-gold-600: #a87d28;
-
-  /* Paleta Ink (cinza azulado para texto) */
-  --color-ink-900: #1e2329;
-  --color-ink-700: #2d3540;
-  --color-ink-500: #4a5568;
-  --color-ink-300: #8896a8;
+  /* Paleta de texto */
+  --color-ink-900: #0f0f0f;
+  --color-ink-700: #1f1f1f;
+  --color-ink-500: #6b6b6b;
+  --color-ink-400: #8a8a8a;
+  --color-ink-300: #b5b5b5;
 
   /* Tipografia */
-  --font-display: var(--font-cormorant);
-  --font-sans: var(--font-source-sans);
+  --font-sans: var(--font-inter);
 }
 
 /* Scrollbar customizada */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-parchment-100);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-parchment-400);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-parchment-500);
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f3f3f3; }
+::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a3a3a3; }
 
 /* Base */
+html { font-size: 16.5px; }
+
 body {
-  background-color: var(--color-parchment-50);
+  background-color: #f5f5f5;
   color: var(--color-ink-900);
-  font-family: var(--font-source-sans), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }

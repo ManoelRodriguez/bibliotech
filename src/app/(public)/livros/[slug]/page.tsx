@@ -60,7 +60,7 @@ export default async function BookPage({ params }: BookPageProps) {
                   <BookOpen className="w-10 h-10 text-parchment-500" />
                   <p
                     className="text-center text-sm text-parchment-700 leading-snug"
-                    style={{ fontFamily: "var(--font-cormorant)" }}
+                   
                   >
                     {book.title}
                   </p>
@@ -83,7 +83,7 @@ export default async function BookPage({ params }: BookPageProps) {
           <div>
             <h1
               className="text-4xl sm:text-5xl font-semibold text-ink-900 leading-tight"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+             
             >
               {book.title}
             </h1>
@@ -123,7 +123,7 @@ export default async function BookPage({ params }: BookPageProps) {
             <div>
               <h2
                 className="text-lg font-semibold text-ink-800 mb-2"
-                style={{ fontFamily: "var(--font-cormorant)" }}
+               
               >
                 Sobre o livro
               </h2>
@@ -141,7 +141,7 @@ export default async function BookPage({ params }: BookPageProps) {
           <section>
             <h2
               className="text-2xl font-semibold text-ink-900 mb-4"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+             
             >
               Resumo
             </h2>
@@ -155,7 +155,7 @@ export default async function BookPage({ params }: BookPageProps) {
           <section>
             <h2
               className="text-2xl font-semibold text-ink-900 mb-4"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+             
             >
               Anotações pessoais
             </h2>
@@ -164,7 +164,7 @@ export default async function BookPage({ params }: BookPageProps) {
               <div className="absolute left-10 top-0 bottom-0 w-px bg-amber-200" aria-hidden />
               <p
                 className="relative text-sm text-ink-700 leading-loose whitespace-pre-line pl-6 italic"
-                style={{ fontFamily: "var(--font-cormorant)" }}
+               
               >
                 {book.notes}
               </p>

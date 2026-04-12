@@ -40,7 +40,7 @@ export function DeleteBookButton({ id, title }: { id: string; title: string }) {
           <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm">
             <h3
               className="text-xl font-semibold text-ink-900 mb-2"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+             
             >
               Remover livro?
             </h3>

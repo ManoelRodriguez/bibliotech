@@ -20,7 +20,7 @@ export default async function NovoLivroPage() {
         </Link>
         <h1
           className="text-3xl font-semibold text-ink-900"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+         
         >
           Novo livro
         </h1>

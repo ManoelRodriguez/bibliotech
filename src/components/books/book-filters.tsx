@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import type { GenreWithCount } from "@/types";
 
 interface BookFiltersProps {
@@ -12,12 +11,12 @@ export function BookFilters({ genres }: BookFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const activeGenre = searchParams.get("genre");
+  const activeGenre = searchParams.get("genre") ?? "";
 
-  function handleGenre(slug: string | null) {
+  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const params = new URLSearchParams(searchParams.toString());
-    if (slug) {
-      params.set("genre", slug);
+    if (e.target.value) {
+      params.set("genre", e.target.value);
     } else {
       params.delete("genre");
     }
@@ -25,35 +24,17 @@ export function BookFilters({ genres }: BookFiltersProps) {
   }
 
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
-      <button
-        onClick={() => handleGenre(null)}
-        className={cn(
-          "shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors",
-          !activeGenre
-            ? "bg-leather-600 text-white"
-            : "bg-parchment-100 text-ink-600 hover:bg-parchment-200"
-        )}
-      >
-        Todos
-      </button>
+    <select
+      value={activeGenre}
+      onChange={handleChange}
+      className="h-9 px-3 text-sm rounded-lg border border-parchment-200 bg-white text-ink-700 focus:outline-none focus:ring-2 focus:ring-ink-900 focus:border-transparent transition cursor-pointer min-w-[180px]"
+    >
+      <option value="">Todos os gêneros</option>
       {genres.map((genre) => (
-        <button
-          key={genre.id}
-          onClick={() => handleGenre(genre.slug)}
-          className={cn(
-            "shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors",
-            activeGenre === genre.slug
-              ? "bg-leather-600 text-white"
-              : "bg-parchment-100 text-ink-600 hover:bg-parchment-200"
-          )}
-        >
-          {genre.name}
-          {genre._count.books > 0 && (
-            <span className="ml-1.5 opacity-60 text-xs">{genre._count.books}</span>
-          )}
-        </button>
+        <option key={genre.id} value={genre.slug}>
+          {genre.name} ({genre._count.books})
+        </option>
       ))}
-    </div>
+    </select>
   );
 }

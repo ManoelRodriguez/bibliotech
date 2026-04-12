@@ -16,7 +16,7 @@ export default async function AdminLivrosPage() {
         <div>
           <h1
             className="text-3xl font-semibold text-ink-900"
-            style={{ fontFamily: "var(--font-cormorant)" }}
+           
           >
             Livros
           </h1>

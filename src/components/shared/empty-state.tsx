@@ -14,7 +14,7 @@ export function EmptyState({
       <BookOpen className="w-12 h-12 text-parchment-400 mb-4" />
       <h3
         className="text-xl font-semibold text-ink-700 mb-1"
-        style={{ fontFamily: "var(--font-cormorant)" }}
+       
       >
         {title}
       </h3>

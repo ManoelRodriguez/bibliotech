@@ -11,7 +11,7 @@ export default async function AdminDashboardPage() {
       <div>
         <h1
           className="text-3xl font-semibold text-ink-900"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+         
         >
           Dashboard
         </h1>
@@ -62,7 +62,7 @@ export default async function AdminDashboardPage() {
       <div>
         <h2
           className="text-xl font-semibold text-ink-900 mb-4"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+         
         >
           Livros por gênero
         </h2>
