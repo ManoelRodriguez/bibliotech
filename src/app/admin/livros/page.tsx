@@ -1,8 +1,9 @@
-import Link from "next/link";
 import Image from "next/image";
 import { getAdminBooks } from "@/actions/books";
 import { DeleteBookButton } from "@/components/books/delete-book-button";
-import { Plus, Pencil, BookOpen } from "lucide-react";
+import { AdminBooksClient } from "@/components/books/admin-books-client";
+import { Plus, BookOpen } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = { title: "Livros" };
 
@@ -109,14 +110,7 @@ export default async function AdminLivrosPage() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1 justify-end">
-                      <Link
-                        href={`/admin/livros/${book.id}/editar`}
-                        className="p-1.5 text-ink-300 hover:text-leather-600 transition-colors rounded"
-                        title="Editar livro"
-                      >
-                        <Pencil className="w-4 h-4" />
-                      </Link>
-                      <DeleteBookButton id={book.id} title={book.title} />
+                      <AdminBooksClient bookId={book.id} bookTitle={book.title} />
                     </div>
                   </td>
                 </tr>

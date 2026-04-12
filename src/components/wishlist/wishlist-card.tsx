@@ -52,8 +52,8 @@ export function WishlistCard({ item, onEdit }: WishlistCardProps) {
         item.purchased && "opacity-60"
       )}
     >
-      {/* Header do card */}
-      <div className="flex items-start justify-between gap-2">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <p
             className={cn(
@@ -69,7 +69,7 @@ export function WishlistCard({ item, onEdit }: WishlistCardProps) {
         </div>
 
         {/* Badges */}
-        <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
           {item.genre && (
             <span className="text-xs px-2 py-0.5 rounded-full bg-parchment-100 text-ink-500">
               {item.genre}
@@ -93,56 +93,56 @@ export function WishlistCard({ item, onEdit }: WishlistCardProps) {
           onClick={handleToggle}
           disabled={isPendingToggle}
           className={cn(
-            "flex items-center gap-1.5 text-xs font-medium rounded-md px-2.5 py-1.5 transition",
+            "flex items-center gap-1.5 text-xs font-medium rounded-md px-3 py-2 transition min-w-[44px]",
             item.purchased
               ? "bg-green-50 text-green-700 hover:bg-green-100"
               : "bg-parchment-100 text-ink-500 hover:bg-parchment-200"
           )}
         >
-          {isPendingToggle ? (
-            <Loader2 className="w-3 h-3 animate-spin" />
-          ) : (
-            <Check className="w-3 h-3" />
-          )}
-          {item.purchased ? "Comprado" : "Marcar como comprado"}
+          {isPendingToggle
+            ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            : <Check className="w-3.5 h-3.5" />
+          }
+          {item.purchased ? "Comprado" : "Marcar"}
         </button>
 
         {/* Ações */}
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-1">
           {item.link && (
             <a
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 text-ink-300 hover:text-ink-600 transition rounded"
+              className="p-2.5 text-ink-400 hover:text-ink-700 hover:bg-parchment-100 rounded-lg transition"
               title="Abrir link"
             >
-              <ExternalLink className="w-3.5 h-3.5" />
+              <ExternalLink className="w-4.5 h-4.5" />
             </a>
           )}
+
           <button
             onClick={() => onEdit(item)}
-            className="p-1.5 text-ink-300 hover:text-ink-600 transition rounded"
+            className="p-2.5 text-ink-400 hover:text-ink-700 hover:bg-parchment-100 rounded-lg transition"
             title="Editar"
           >
-            <Pencil className="w-3.5 h-3.5" />
+            <Pencil className="w-4.5 h-4.5" />
           </button>
+
           <button
             onClick={handleDelete}
             disabled={isPendingDelete}
             className={cn(
-              "p-1.5 transition rounded text-xs",
+              "p-2.5 rounded-lg transition",
               confirmDelete
-                ? "text-red-500 hover:text-red-700 font-medium"
-                : "text-ink-300 hover:text-red-400"
+                ? "text-red-600 bg-red-50 hover:bg-red-100"
+                : "text-ink-400 hover:text-red-500 hover:bg-red-50"
             )}
-            title={confirmDelete ? "Clique novamente para confirmar" : "Remover"}
+            title={confirmDelete ? "Clique para confirmar exclusão" : "Remover"}
           >
-            {isPendingDelete ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            ) : (
-              <Trash2 className="w-3.5 h-3.5" />
-            )}
+            {isPendingDelete
+              ? <Loader2 className="w-4.5 h-4.5 animate-spin" />
+              : <Trash2 className="w-4.5 h-4.5" />
+            }
           </button>
         </div>
       </div>
