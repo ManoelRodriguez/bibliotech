@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { BookOpen, Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -28,7 +26,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/admin");
+    window.location.href = "/admin";
   }
 
   return (
@@ -74,7 +72,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} method="post" className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-ink-700 mb-1.5">
                 E-mail

@@ -11,9 +11,14 @@ export function SearchBar() {
   const [value, setValue] = useState(searchParams.get("search") ?? "");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Ref para sempre ter o searchParams mais recente sem criar dependência no callback
+  const searchParamsRef = useRef(searchParams);
+  searchParamsRef.current = searchParams;
+
+  // updateSearch é estável — não muda quando searchParams muda externamente (ex: filtro de gênero)
   const updateSearch = useCallback(
     (term: string) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParamsRef.current.toString());
       if (term) {
         params.set("search", term);
       } else {
@@ -21,9 +26,10 @@ export function SearchBar() {
       }
       router.replace(`${pathname}?${params.toString()}`);
     },
-    [router, pathname, searchParams]
+    [router, pathname]
   );
 
+  // useEffect só dispara quando o usuário digita (value muda), não quando gênero muda
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => updateSearch(value), 350);
