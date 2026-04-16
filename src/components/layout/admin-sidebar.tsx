@@ -1,9 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { BookOpen, LayoutDashboard, Library, Star, LogOut } from "lucide-react";
+import {
+  BookOpen,
+  LayoutDashboard,
+  Library,
+  Star,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -12,14 +21,26 @@ const navItems = [
   { href: "/admin/wishlist", label: "Wishlist", icon: Star },
 ];
 
-export function AdminSidebar() {
+function SidebarContent({
+  onNavigate,
+  showClose,
+  onClose,
+}: {
+  onNavigate: () => void;
+  showClose: boolean;
+  onClose: () => void;
+}) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 min-h-screen bg-white border-r border-parchment-200 flex flex-col">
+    <>
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-parchment-200">
-        <Link href="/" className="flex items-center gap-2.5 group">
+      <div className="px-5 py-5 border-b border-parchment-200 flex items-center justify-between">
+        <Link
+          href="/"
+          onClick={onNavigate}
+          className="flex items-center gap-2.5 group"
+        >
           <div className="w-7 h-7 bg-ink-900 rounded-md flex items-center justify-center shrink-0">
             <BookOpen className="w-3.5 h-3.5 text-white" />
           </div>
@@ -27,6 +48,15 @@ export function AdminSidebar() {
             BiblioTech
           </span>
         </Link>
+        {showClose && (
+          <button
+            onClick={onClose}
+            className="p-1.5 text-ink-400 hover:text-ink-700 rounded-lg transition-colors"
+            aria-label="Fechar menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Nav */}
@@ -39,6 +69,7 @@ export function AdminSidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onNavigate}
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors",
                 active
@@ -63,6 +94,56 @@ export function AdminSidebar() {
           Sair
         </button>
       </div>
-    </aside>
+    </>
+  );
+}
+
+export function AdminSidebar() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const close = () => setMobileOpen(false);
+
+  return (
+    <>
+      {/* ── Top bar mobile ─────────────────────────────── */}
+      <div className="md:hidden fixed top-0 inset-x-0 z-40 h-14 bg-white border-b border-parchment-200 flex items-center justify-between px-4">
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="w-7 h-7 bg-ink-900 rounded-md flex items-center justify-center shrink-0">
+            <BookOpen className="w-3.5 h-3.5 text-white" />
+          </div>
+          <span className="text-base font-semibold text-ink-900 tracking-tight">
+            BiblioTech
+          </span>
+        </Link>
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="p-2 text-ink-500 hover:text-ink-900 rounded-lg transition-colors"
+          aria-label="Abrir menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* ── Sidebar desktop ────────────────────────────── */}
+      <aside className="hidden md:flex w-56 min-h-screen bg-white border-r border-parchment-200 flex-col shrink-0">
+        <SidebarContent onNavigate={() => {}} showClose={false} onClose={() => {}} />
+      </aside>
+
+      {/* ── Drawer mobile ──────────────────────────────── */}
+      {mobileOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="md:hidden fixed inset-0 z-40 bg-ink-900/30 backdrop-blur-sm"
+            onClick={close}
+            aria-hidden
+          />
+          {/* Drawer */}
+          <aside className="md:hidden fixed inset-y-0 left-0 z-50 w-64 bg-white flex flex-col shadow-xl">
+            <SidebarContent onNavigate={close} showClose={true} onClose={close} />
+          </aside>
+        </>
+      )}
+    </>
   );
 }
