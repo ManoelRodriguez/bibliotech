@@ -5,51 +5,58 @@ import { prisma } from "@/lib/prisma";
 import { bookSchema } from "@/lib/validations/book";
 import { slugify } from "@/lib/utils";
 import { uploadCover, deleteCover } from "@/lib/cloudinary";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
 import type { BookWithGenre, GenreWithCount } from "@/types";
 
 export type ActionState = { error?: string };
 
-// ─── Queries públicas ──────────────────────────────────────────────────────
+// ─── Queries públicas (com cache) ─────────────────────────────────────────
 
-export async function getBooks(options?: {
-  genreSlug?: string;
-  search?: string;
-}): Promise<BookWithGenre[]> {
-  return prisma.book.findMany({
-    where: {
-      isPublished: true,
-      ...(options?.genreSlug && {
-        genre: { slug: options.genreSlug },
-      }),
-      ...(options?.search && {
-        OR: [
-          { title: { contains: options.search, mode: "insensitive" } },
-          { author: { contains: options.search, mode: "insensitive" } },
-        ],
-      }),
-    },
-    include: { genre: true },
-    orderBy: { createdAt: "desc" },
-  });
-}
+export const getBooks = unstable_cache(
+  async (genreSlug?: string, search?: string): Promise<BookWithGenre[]> => {
+    return prisma.book.findMany({
+      where: {
+        isPublished: true,
+        ...(genreSlug && {
+          genre: { slug: genreSlug },
+        }),
+        ...(search && {
+          OR: [
+            { title: { contains: search, mode: "insensitive" } },
+            { author: { contains: search, mode: "insensitive" } },
+          ],
+        }),
+      },
+      include: { genre: true },
+      orderBy: { createdAt: "desc" },
+    });
+  },
+  ["books-list"],
+  { tags: ["books"], revalidate: 120 }
+);
 
-export async function getBookBySlug(
-  slug: string
-): Promise<BookWithGenre | null> {
-  return prisma.book.findUnique({
-    where: { slug, isPublished: true },
-    include: { genre: true },
-  });
-}
+export const getBookBySlug = unstable_cache(
+  async (slug: string): Promise<BookWithGenre | null> => {
+    return prisma.book.findUnique({
+      where: { slug, isPublished: true },
+      include: { genre: true },
+    });
+  },
+  ["book-by-slug"],
+  { tags: ["books"], revalidate: 120 }
+);
 
-export async function getGenres(): Promise<GenreWithCount[]> {
-  return prisma.genre.findMany({
-    include: { _count: { select: { books: { where: { isPublished: true } } } } },
-    orderBy: { name: "asc" },
-  });
-}
+export const getGenres = unstable_cache(
+  async (): Promise<GenreWithCount[]> => {
+    return prisma.genre.findMany({
+      include: { _count: { select: { books: { where: { isPublished: true } } } } },
+      orderBy: { name: "asc" },
+    });
+  },
+  ["genres-list"],
+  { tags: ["genres"], revalidate: 120 }
+);
 
 // ─── Queries admin ─────────────────────────────────────────────────────────
 
@@ -61,41 +68,66 @@ async function requireAuth() {
 
 export async function getAdminBooks(): Promise<BookWithGenre[]> {
   await requireAuth();
-  return prisma.book.findMany({
-    include: { genre: true },
-    orderBy: { createdAt: "desc" },
-  });
+  return cachedAdminBooks();
 }
+
+const cachedAdminBooks = unstable_cache(
+  async (): Promise<BookWithGenre[]> => {
+    return prisma.book.findMany({
+      include: { genre: true },
+      orderBy: { createdAt: "desc" },
+    });
+  },
+  ["admin-books"],
+  { tags: ["books"], revalidate: 60 }
+);
 
 export async function getBookById(id: string): Promise<BookWithGenre | null> {
   await requireAuth();
-  return prisma.book.findUnique({
-    where: { id },
-    include: { genre: true },
-  });
+  return cachedBookById(id);
 }
+
+const cachedBookById = unstable_cache(
+  async (id: string): Promise<BookWithGenre | null> => {
+    return prisma.book.findUnique({
+      where: { id },
+      include: { genre: true },
+    });
+  },
+  ["admin-book-by-id"],
+  { tags: ["books"], revalidate: 60 }
+);
 
 export async function getDashboardStats() {
   await requireAuth();
-  const [totalBooks, publishedBooks, genres, totalWishlist] = await Promise.all([
-    prisma.book.count(),
-    prisma.book.count({ where: { isPublished: true } }),
-    prisma.genre.findMany({
-      include: { _count: { select: { books: true } } },
-      orderBy: { name: "asc" },
-    }),
-    prisma.wishlistItem.count(),
-  ]);
-  const totalPages = await prisma.book.aggregate({ _sum: { pages: true } });
-  return {
-    totalBooks,
-    publishedBooks,
-    draftBooks: totalBooks - publishedBooks,
-    genres,
-    totalWishlist,
-    totalPages: totalPages._sum.pages ?? 0,
-  };
+  return cachedDashboardStats();
 }
+
+const cachedDashboardStats = unstable_cache(
+  async () => {
+    const [totalBooks, publishedBooks, genres, totalWishlist, totalPages] =
+      await Promise.all([
+        prisma.book.count(),
+        prisma.book.count({ where: { isPublished: true } }),
+        prisma.genre.findMany({
+          include: { _count: { select: { books: true } } },
+          orderBy: { name: "asc" },
+        }),
+        prisma.wishlistItem.count(),
+        prisma.book.aggregate({ _sum: { pages: true } }),
+      ]);
+    return {
+      totalBooks,
+      publishedBooks,
+      draftBooks: totalBooks - publishedBooks,
+      genres,
+      totalWishlist,
+      totalPages: totalPages._sum.pages ?? 0,
+    };
+  },
+  ["dashboard-stats"],
+  { tags: ["books", "genres"], revalidate: 60 }
+);
 
 // ─── Mutations ─────────────────────────────────────────────────────────────
 
@@ -166,6 +198,8 @@ export async function createBook(
     },
   });
 
+  revalidateTag("books", "max");
+  revalidateTag("genres", "max");
   revalidatePath("/admin/livros");
   revalidatePath("/");
   redirect("/admin/livros");
@@ -247,6 +281,8 @@ export async function updateBook(
     },
   });
 
+  revalidateTag("books", "max");
+  revalidateTag("genres", "max");
   revalidatePath("/admin/livros");
   revalidatePath(`/livros/${newSlug}`);
   revalidatePath("/");
@@ -269,6 +305,8 @@ export async function deleteBook(id: string): Promise<ActionState> {
 
   await prisma.book.delete({ where: { id } });
 
+  revalidateTag("books", "max");
+  revalidateTag("genres", "max");
   revalidatePath("/admin/livros");
   revalidatePath("/");
   revalidatePath(`/livros/${book.slug}`);

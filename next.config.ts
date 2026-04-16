@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "10mb",
     },
+    staleTimes: {
+      dynamic: 30, // páginas dinâmicas ficam no cache do browser por 30s
+      static: 300, // páginas estáticas/ISR por 5min
+    },
   },
 };
 

@@ -18,7 +18,7 @@ interface HomePageProps {
 export default async function HomePage({ searchParams }: HomePageProps) {
   const { genre, search } = await searchParams;
   const [books, genres] = await Promise.all([
-    getBooks({ genreSlug: genre, search }),
+    getBooks(genre, search),
     getGenres(),
   ]);
 

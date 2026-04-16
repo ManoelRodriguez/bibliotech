@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { wishlistSchema } from "@/lib/validations/wishlist";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import type { WishlistItem } from "@prisma/client";
 
 export type WishlistActionState = { error?: string; success?: boolean };
@@ -17,12 +17,20 @@ async function requireAuth() {
 
 export async function getWishlistItems(): Promise<WishlistItem[]> {
   await requireAuth();
-  const items = await prisma.wishlistItem.findMany();
-  return items.sort((a, b) => {
-    if (a.purchased !== b.purchased) return a.purchased ? 1 : -1;
-    return priorityOrder[a.priority] - priorityOrder[b.priority];
-  });
+  return cachedWishlistItems();
 }
+
+const cachedWishlistItems = unstable_cache(
+  async (): Promise<WishlistItem[]> => {
+    const items = await prisma.wishlistItem.findMany();
+    return items.sort((a, b) => {
+      if (a.purchased !== b.purchased) return a.purchased ? 1 : -1;
+      return priorityOrder[a.priority] - priorityOrder[b.priority];
+    });
+  },
+  ["wishlist-items"],
+  { tags: ["wishlist"], revalidate: 60 }
+);
 
 export async function createWishlistItem(
   prevState: WishlistActionState,
@@ -56,6 +64,7 @@ export async function createWishlistItem(
     },
   });
 
+  revalidateTag("wishlist", "max");
   revalidatePath("/admin/wishlist");
   return { success: true };
 }
@@ -97,6 +106,7 @@ export async function updateWishlistItem(
     },
   });
 
+  revalidateTag("wishlist", "max");
   revalidatePath("/admin/wishlist");
   return { success: true };
 }
@@ -114,6 +124,7 @@ export async function toggleWishlistPurchased(
     data: { purchased: !item.purchased },
   });
 
+  revalidateTag("wishlist", "max");
   revalidatePath("/admin/wishlist");
   return {};
 }
@@ -128,6 +139,7 @@ export async function deleteWishlistItem(
 
   await prisma.wishlistItem.delete({ where: { id } });
 
+  revalidateTag("wishlist", "max");
   revalidatePath("/admin/wishlist");
   return {};
 }
