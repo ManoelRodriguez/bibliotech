@@ -37,7 +37,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       </div>
 
       {/* Grid */}
-      <BookGrid books={books} />
+      <BookGrid books={books} animationKey={`${genre ?? ""}-${search ?? ""}`} />
     </div>
   );
 }

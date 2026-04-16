@@ -11,7 +11,7 @@ export function BookCard({ book }: BookCardProps) {
   return (
     <Link href={`/livros/${book.slug}`} className="group block">
       {/* Capa */}
-      <div className="aspect-[2/3] relative rounded-lg overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
+      <div className="aspect-[2/3] relative rounded-lg overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 group-hover:scale-[1.02]">
         {book.coverUrl ? (
           <Image
             src={book.coverUrl}
