@@ -106,15 +106,7 @@ export function AdminSidebar() {
   return (
     <>
       {/* ── Top bar mobile ─────────────────────────────── */}
-      <div className="md:hidden fixed top-0 inset-x-0 z-40 h-14 bg-white border-b border-parchment-200 flex items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-7 h-7 bg-ink-900 rounded-md flex items-center justify-center shrink-0">
-            <BookOpen className="w-3.5 h-3.5 text-white" />
-          </div>
-          <span className="text-base font-semibold text-ink-900 tracking-tight">
-            BiblioTech
-          </span>
-        </Link>
+      <div className="md:hidden fixed top-0 inset-x-0 z-40 h-14 bg-white border-b border-parchment-200 flex items-center px-4">
         <button
           onClick={() => setMobileOpen(true)}
           className="p-2 text-ink-500 hover:text-ink-900 rounded-lg transition-colors"
@@ -122,6 +114,14 @@ export function AdminSidebar() {
         >
           <Menu className="w-5 h-5" />
         </button>
+        <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 group">
+          <div className="w-7 h-7 bg-ink-900 rounded-md flex items-center justify-center shrink-0">
+            <BookOpen className="w-3.5 h-3.5 text-white" />
+          </div>
+          <span className="text-base font-semibold text-ink-900 tracking-tight">
+            BiblioTech
+          </span>
+        </Link>
       </div>
 
       {/* ── Sidebar desktop ────────────────────────────── */}
