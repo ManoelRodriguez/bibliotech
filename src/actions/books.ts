@@ -271,5 +271,6 @@ export async function deleteBook(id: string): Promise<ActionState> {
 
   revalidatePath("/admin/livros");
   revalidatePath("/");
+  revalidatePath(`/livros/${book.slug}`);
   return {};
 }

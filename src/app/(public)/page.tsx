@@ -4,6 +4,8 @@ import { BookGrid } from "@/components/books/book-grid";
 import { BookFilters } from "@/components/books/book-filters";
 import { SearchBar } from "@/components/shared/search-bar";
 
+export const revalidate = 3600;
+
 export const metadata = {
   title: "BiblioTech — Catálogo",
   description: "Biblioteca virtual pessoal de livros teológicos.",

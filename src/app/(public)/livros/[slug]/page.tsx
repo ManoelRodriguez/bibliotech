@@ -3,7 +3,19 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { getBookBySlug } from "@/actions/books";
+import { prisma } from "@/lib/prisma";
 import { ChevronLeft, BookOpen, Calendar, Hash, AlignLeft, FileText } from "lucide-react";
+
+export const revalidate = 3600; // revalida no máximo a cada 1h (fallback para on-demand)
+export const dynamicParams = true; // slugs novos renderizados dinamicamente na 1ª visita
+
+export async function generateStaticParams() {
+  const books = await prisma.book.findMany({
+    where: { isPublished: true },
+    select: { slug: true },
+  });
+  return books.map((b) => ({ slug: b.slug }));
+}
 
 interface BookPageProps {
   params: Promise<{ slug: string }>;
