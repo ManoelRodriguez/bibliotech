@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { wishlistSchema } from "@/lib/validations/wishlist";
-import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
+import { revalidatePath, unstable_cache } from "next/cache";
 import type { WishlistItem } from "@prisma/client";
 
 export type WishlistActionState = { error?: string; success?: boolean };
@@ -64,7 +64,6 @@ export async function createWishlistItem(
     },
   });
 
-  revalidateTag("wishlist", "max");
   revalidatePath("/admin/wishlist");
   return { success: true };
 }
@@ -106,7 +105,6 @@ export async function updateWishlistItem(
     },
   });
 
-  revalidateTag("wishlist", "max");
   revalidatePath("/admin/wishlist");
   return { success: true };
 }
@@ -124,7 +122,6 @@ export async function toggleWishlistPurchased(
     data: { purchased: !item.purchased },
   });
 
-  revalidateTag("wishlist", "max");
   revalidatePath("/admin/wishlist");
   return {};
 }
@@ -139,7 +136,6 @@ export async function deleteWishlistItem(
 
   await prisma.wishlistItem.delete({ where: { id } });
 
-  revalidateTag("wishlist", "max");
   revalidatePath("/admin/wishlist");
   return {};
 }

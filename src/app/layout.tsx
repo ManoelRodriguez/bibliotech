@@ -25,7 +25,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={inter.variable}>
-      <body className="min-h-screen flex flex-col antialiased">
+      <body className="min-h-screen flex flex-col antialiased" suppressHydrationWarning>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark-mode');}})();`,
+          }}
+        />
         {children}
         <Toaster richColors position="top-right" />
       </body>

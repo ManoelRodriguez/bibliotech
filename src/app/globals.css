@@ -50,4 +50,81 @@ body {
   background-color: #f5f5f5;
   color: var(--color-ink-900);
   font-family: var(--font-inter), system-ui, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* ─── Dark Mode ─────────────────────────────────────────────────────────── */
+
+body.dark-mode {
+  background-color: #111827;
+  color: #f9fafb;
+}
+
+/* Superfícies brancas */
+body.dark-mode .bg-white                    { background-color: #1f2937; }
+
+/* Parchment — superfícies */
+body.dark-mode .bg-parchment-50             { background-color: #1e293b; }
+body.dark-mode .bg-parchment-100            { background-color: #334155; }
+body.dark-mode .bg-parchment-200            { background-color: #475569; }
+
+/* Parchment — hover */
+body.dark-mode .hover\:bg-parchment-50:hover  { background-color: #1e293b; }
+body.dark-mode .hover\:bg-parchment-100:hover { background-color: #334155; }
+
+/* Parchment — bordas */
+body.dark-mode .border-parchment-200        { border-color: #475569; }
+body.dark-mode .border-parchment-300        { border-color: #64748b; }
+body.dark-mode .border-parchment-100        { border-color: #334155; }
+
+/* Parchment — divisores (divide-y usa border-color nos filhos) */
+body.dark-mode .divide-parchment-100 > * + * { border-color: #334155; }
+
+/* Ink — textos */
+body.dark-mode .text-ink-900               { color: #f9fafb; }
+body.dark-mode .text-ink-700               { color: #e5e7eb; }
+body.dark-mode .text-ink-500               { color: #9ca3af; }
+body.dark-mode .text-ink-400               { color: #9ca3af; }
+body.dark-mode .text-ink-300               { color: #6b7280; }
+
+/* Ink — hover */
+body.dark-mode .hover\:text-ink-700:hover  { color: #e5e7eb; }
+body.dark-mode .hover\:text-ink-900:hover  { color: #f9fafb; }
+
+/* Parchment — textos */
+body.dark-mode .text-parchment-500         { color: #94a3b8; }
+body.dark-mode .text-parchment-700         { color: #e2e8f0; }
+
+/* Leather — textos e ícones (viram claros no dark) */
+body.dark-mode .text-leather-600           { color: #e2e8f0; }
+body.dark-mode .text-leather-700           { color: #f1f5f9; }
+body.dark-mode .hover\:text-leather-700:hover { color: #f1f5f9; }
+
+/* Leather — superfícies sutis */
+body.dark-mode .bg-leather-50              { background-color: #1e293b; }
+body.dark-mode .hover\:bg-leather-100:hover { background-color: #334155; }
+
+/* Leather — botões de ação primária (mantidos escuros/elevados) */
+body.dark-mode .bg-leather-600             { background-color: #374151; }
+body.dark-mode .hover\:bg-leather-700:hover { background-color: #4b5563; }
+
+/* Inputs e selects */
+body.dark-mode input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+body.dark-mode textarea,
+body.dark-mode select {
+  background-color: #1f2937;
+  border-color: #475569;
+  color: #f9fafb;
+}
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder { color: #6b7280; }
+
+/* Seção de anotações — amber (built-in, sem variável) */
+body.dark-mode .bg-amber-50                { background-color: #1c1400; }
+body.dark-mode .border-amber-200           { border-color: #78350f; }
+body.dark-mode .bg-amber-200               { background-color: #92400e; }
+
+/* Scrollbar */
+body.dark-mode ::-webkit-scrollbar-track  { background: #1f2937; }
+body.dark-mode ::-webkit-scrollbar-thumb  { background: #475569; }
+body.dark-mode ::-webkit-scrollbar-thumb:hover { background: #64748b; }

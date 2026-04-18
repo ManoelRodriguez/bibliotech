@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { bookSchema } from "@/lib/validations/book";
 import { slugify } from "@/lib/utils";
 import { uploadCover, deleteCover } from "@/lib/cloudinary";
-import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
+import { revalidatePath, unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
 import type { BookWithGenre, GenreWithCount } from "@/types";
 
@@ -68,66 +68,42 @@ async function requireAuth() {
 
 export async function getAdminBooks(): Promise<BookWithGenre[]> {
   await requireAuth();
-  return cachedAdminBooks();
+  return prisma.book.findMany({
+    include: { genre: true },
+    orderBy: { createdAt: "desc" },
+  });
 }
-
-const cachedAdminBooks = unstable_cache(
-  async (): Promise<BookWithGenre[]> => {
-    return prisma.book.findMany({
-      include: { genre: true },
-      orderBy: { createdAt: "desc" },
-    });
-  },
-  ["admin-books"],
-  { tags: ["books"], revalidate: 60 }
-);
 
 export async function getBookById(id: string): Promise<BookWithGenre | null> {
   await requireAuth();
-  return cachedBookById(id);
+  return prisma.book.findUnique({
+    where: { id },
+    include: { genre: true },
+  });
 }
-
-const cachedBookById = unstable_cache(
-  async (id: string): Promise<BookWithGenre | null> => {
-    return prisma.book.findUnique({
-      where: { id },
-      include: { genre: true },
-    });
-  },
-  ["admin-book-by-id"],
-  { tags: ["books"], revalidate: 60 }
-);
 
 export async function getDashboardStats() {
   await requireAuth();
-  return cachedDashboardStats();
+  const [totalBooks, publishedBooks, genres, totalWishlist, totalPages] =
+    await Promise.all([
+      prisma.book.count(),
+      prisma.book.count({ where: { isPublished: true } }),
+      prisma.genre.findMany({
+        include: { _count: { select: { books: true } } },
+        orderBy: { name: "asc" },
+      }),
+      prisma.wishlistItem.count(),
+      prisma.book.aggregate({ _sum: { pages: true } }),
+    ]);
+  return {
+    totalBooks,
+    publishedBooks,
+    draftBooks: totalBooks - publishedBooks,
+    genres,
+    totalWishlist,
+    totalPages: totalPages._sum.pages ?? 0,
+  };
 }
-
-const cachedDashboardStats = unstable_cache(
-  async () => {
-    const [totalBooks, publishedBooks, genres, totalWishlist, totalPages] =
-      await Promise.all([
-        prisma.book.count(),
-        prisma.book.count({ where: { isPublished: true } }),
-        prisma.genre.findMany({
-          include: { _count: { select: { books: true } } },
-          orderBy: { name: "asc" },
-        }),
-        prisma.wishlistItem.count(),
-        prisma.book.aggregate({ _sum: { pages: true } }),
-      ]);
-    return {
-      totalBooks,
-      publishedBooks,
-      draftBooks: totalBooks - publishedBooks,
-      genres,
-      totalWishlist,
-      totalPages: totalPages._sum.pages ?? 0,
-    };
-  },
-  ["dashboard-stats"],
-  { tags: ["books", "genres"], revalidate: 60 }
-);
 
 // ─── Mutations ─────────────────────────────────────────────────────────────
 
@@ -198,10 +174,7 @@ export async function createBook(
     },
   });
 
-  revalidateTag("books", "max");
-  revalidateTag("genres", "max");
-  revalidatePath("/admin/livros");
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   redirect("/admin/livros");
 }
 
@@ -281,11 +254,7 @@ export async function updateBook(
     },
   });
 
-  revalidateTag("books", "max");
-  revalidateTag("genres", "max");
-  revalidatePath("/admin/livros");
-  revalidatePath(`/livros/${newSlug}`);
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   redirect("/admin/livros");
 }
 
@@ -305,10 +274,6 @@ export async function deleteBook(id: string): Promise<ActionState> {
 
   await prisma.book.delete({ where: { id } });
 
-  revalidateTag("books", "max");
-  revalidateTag("genres", "max");
-  revalidatePath("/admin/livros");
-  revalidatePath("/");
-  revalidatePath(`/livros/${book.slug}`);
+  revalidatePath("/", "layout");
   return {};
 }

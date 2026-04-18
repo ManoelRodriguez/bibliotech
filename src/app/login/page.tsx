@@ -34,14 +34,14 @@ export default function LoginPage() {
 
       {/* ── Esquerda — identidade ───────────────────────── */}
       <div className="hidden md:flex md:w-[45%] flex-col items-center justify-center p-12 bg-parchment-100">
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-6">
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-ink-900 rounded-2xl flex items-center justify-center">
-              <BookOpen className="w-8 h-8 text-white" />
+            <div className="w-24 h-24 bg-ink-900 rounded-3xl flex items-center justify-center">
+              <BookOpen className="w-12 h-12 text-white" />
             </div>
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-ink-900 tracking-tight">
+            <h1 className="text-4xl font-semibold text-ink-900 tracking-tight">
               BiblioTech
             </h1>
             <p className="text-sm text-ink-400 mt-1.5">
@@ -55,11 +55,11 @@ export default function LoginPage() {
       <div className="flex-1 flex flex-col items-center justify-center px-8 py-12 bg-white border-l border-parchment-200">
 
         {/* Logo mobile */}
-        <div className="md:hidden flex items-center gap-2 mb-10">
-          <div className="w-8 h-8 bg-ink-900 rounded-lg flex items-center justify-center">
-            <BookOpen className="w-4 h-4 text-white" />
+        <div className="md:hidden flex items-center gap-3 mb-10">
+          <div className="w-12 h-12 bg-ink-900 rounded-xl flex items-center justify-center">
+            <BookOpen className="w-6 h-6 text-white" />
           </div>
-          <span className="text-lg font-semibold text-ink-900">BiblioTech</span>
+          <span className="text-2xl font-semibold text-ink-900">BiblioTech</span>
         </div>
 
         <div className="w-full max-w-sm">
@@ -84,7 +84,7 @@ export default function LoginPage() {
                 autoComplete="email"
                 required
                 placeholder="admin@bibliotech.com"
-                className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-parchment-200 bg-parchment-50 text-ink-900 placeholder:text-ink-300 focus:outline-none focus:ring-2 focus:ring-ink-900 focus:border-transparent transition"
+                className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-parchment-200 bg-[#f3f3f3] text-ink-900 placeholder:text-ink-300 focus:outline-none focus:ring-2 focus:ring-ink-900 focus:border-transparent transition"
               />
             </div>
 
@@ -105,7 +105,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-300 hover:text-ink-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-300 hover:text-ink-900 transition-colors"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

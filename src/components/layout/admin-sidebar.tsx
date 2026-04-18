@@ -14,6 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -84,8 +85,9 @@ function SidebarContent({
         })}
       </nav>
 
-      {/* Sign Out */}
-      <div className="p-3 border-t border-parchment-200">
+      {/* Sign Out + Theme */}
+      <div className="p-3 border-t border-parchment-200 space-y-0.5">
+        <ThemeToggle />
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
           className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-sm text-ink-400 hover:bg-parchment-100 hover:text-ink-700 transition-colors"
