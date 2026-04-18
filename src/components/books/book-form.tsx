@@ -179,11 +179,6 @@ export function BookForm({ action, genres, book }: BookFormProps) {
       {/* Publicado */}
       <div className="flex items-center gap-3">
         <input
-          type="hidden"
-          name="isPublished"
-          value="false"
-        />
-        <input
           id="isPublished"
           name="isPublished"
           type="checkbox"
