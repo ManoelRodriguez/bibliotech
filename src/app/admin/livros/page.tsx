@@ -1,28 +1,31 @@
 import Image from "next/image";
 import { getAdminBooks } from "@/actions/books";
-import { DeleteBookButton } from "@/components/books/delete-book-button";
 import { AdminBooksClient } from "@/components/books/admin-books-client";
+import { Pagination } from "@/components/shared/pagination";
 import { Plus, BookOpen } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export const metadata = { title: "Livros" };
 
-export default async function AdminLivrosPage() {
-  const books = await getAdminBooks();
+interface AdminLivrosPageProps {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function AdminLivrosPage({ searchParams }: AdminLivrosPageProps) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1") || 1);
+
+  const { books, total, pages } = await getAdminBooks(page);
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1
-            className="text-3xl font-semibold text-ink-900"
-           
-          >
-            Livros
-          </h1>
+          <h1 className="text-3xl font-semibold text-ink-900">Livros</h1>
           <p className="text-ink-500 text-sm mt-1">
-            {books.length} {books.length === 1 ? "livro" : "livros"} no acervo
+            {total} {total === 1 ? "livro" : "livros"} no acervo
           </p>
         </div>
         <Link
@@ -35,7 +38,7 @@ export default async function AdminLivrosPage() {
       </div>
 
       {/* Tabela */}
-      {books.length === 0 ? (
+      {total === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-parchment-200 text-center">
           <BookOpen className="w-10 h-10 text-parchment-400 mb-3" />
           <p className="text-ink-500 text-sm">Nenhum livro cadastrado ainda.</p>
@@ -47,77 +50,81 @@ export default async function AdminLivrosPage() {
           </Link>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-parchment-200 overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-parchment-200 bg-parchment-50">
-                <th className="text-left px-5 py-3 text-xs font-medium text-ink-500 uppercase tracking-wide">
-                  Livro
-                </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-ink-500 uppercase tracking-wide hidden md:table-cell">
-                  Gênero
-                </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-ink-500 uppercase tracking-wide hidden lg:table-cell">
-                  Ano
-                </th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-ink-500 uppercase tracking-wide">
-                  Status
-                </th>
-                <th className="px-4 py-3 w-20" />
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-parchment-100">
-              {books.map((book) => (
-                <tr key={book.id} className="hover:bg-parchment-50 transition-colors">
-                  <td className="px-5 py-3">
-                    <div className="flex items-center gap-3">
-                      {book.coverUrl ? (
-                        <div className="relative w-8 h-12 rounded overflow-hidden shrink-0 shadow-sm">
-                          <Image
-                            src={book.coverUrl}
-                            alt={book.title}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-8 h-12 rounded bg-parchment-200 flex items-center justify-center shrink-0">
-                          <BookOpen className="w-3 h-3 text-parchment-500" />
-                        </div>
-                      )}
-                      <div>
-                        <p className="font-medium text-ink-900 line-clamp-1">{book.title}</p>
-                        <p className="text-ink-400 text-xs">{book.author}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-ink-500 hidden md:table-cell">
-                    {book.genre.name}
-                  </td>
-                  <td className="px-4 py-3 text-ink-500 hidden lg:table-cell">
-                    {book.year ?? "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                        book.isPublished
-                          ? "bg-green-50 text-green-700"
-                          : "bg-parchment-100 text-parchment-700"
-                      }`}
-                    >
-                      {book.isPublished ? "Publicado" : "Rascunho"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-1 justify-end">
-                      <AdminBooksClient bookId={book.id} bookTitle={book.title} />
-                    </div>
-                  </td>
+        <>
+          <div className="bg-white rounded-xl border border-parchment-200 overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-parchment-200 bg-parchment-50">
+                  <th className="text-left px-5 py-3 text-xs font-medium text-ink-500 uppercase tracking-wide">
+                    Livro
+                  </th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-ink-500 uppercase tracking-wide hidden md:table-cell">
+                    Gênero
+                  </th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-ink-500 uppercase tracking-wide hidden lg:table-cell">
+                    Ano
+                  </th>
+                  <th className="text-left px-4 py-3 text-xs font-medium text-ink-500 uppercase tracking-wide">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 w-20" />
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-parchment-100">
+                {books.map((book) => (
+                  <tr key={book.id} className="hover:bg-parchment-50 transition-colors">
+                    <td className="px-5 py-3">
+                      <div className="flex items-center gap-3">
+                        {book.coverUrl ? (
+                          <div className="relative w-8 h-12 rounded overflow-hidden shrink-0 shadow-sm">
+                            <Image src={book.coverUrl} alt={book.title} fill className="object-cover" />
+                          </div>
+                        ) : (
+                          <div className="w-8 h-12 rounded bg-parchment-200 flex items-center justify-center shrink-0">
+                            <BookOpen className="w-3 h-3 text-parchment-500" />
+                          </div>
+                        )}
+                        <div>
+                          <p className="font-medium text-ink-900 line-clamp-1">{book.title}</p>
+                          <p className="text-ink-400 text-xs">{book.author}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-ink-500 hidden md:table-cell">
+                      {book.genre.name}
+                    </td>
+                    <td className="px-4 py-3 text-ink-500 hidden lg:table-cell">
+                      {book.year ?? "—"}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                          book.isPublished
+                            ? "bg-green-50 text-green-700"
+                            : "bg-parchment-100 text-parchment-700"
+                        }`}
+                      >
+                        {book.isPublished ? "Publicado" : "Rascunho"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1 justify-end">
+                        <AdminBooksClient bookId={book.id} bookTitle={book.title} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Paginação */}
+          {pages > 1 && (
+            <Suspense>
+              <Pagination currentPage={page} totalPages={pages} />
+            </Suspense>
+          )}
+        </>
       )}
     </div>
   );

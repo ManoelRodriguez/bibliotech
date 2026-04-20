@@ -13,24 +13,36 @@ export type ActionState = { error?: string };
 
 // ─── Queries públicas (com cache) ─────────────────────────────────────────
 
+export type BooksPage = { books: BookWithGenre[]; total: number; pages: number };
+
 export const getBooks = unstable_cache(
-  async (genreSlug?: string, search?: string): Promise<BookWithGenre[]> => {
-    return prisma.book.findMany({
-      where: {
-        isPublished: true,
-        ...(genreSlug && {
-          genre: { slug: genreSlug },
-        }),
-        ...(search && {
-          OR: [
-            { title: { contains: search, mode: "insensitive" } },
-            { author: { contains: search, mode: "insensitive" } },
-          ],
-        }),
-      },
-      include: { genre: true },
-      orderBy: { createdAt: "desc" },
-    });
+  async (
+    genreSlug?: string,
+    search?: string,
+    page = 1,
+    perPage = 20
+  ): Promise<BooksPage> => {
+    const where = {
+      isPublished: true,
+      ...(genreSlug && { genre: { slug: genreSlug } }),
+      ...(search && {
+        OR: [
+          { title: { contains: search, mode: "insensitive" as const } },
+          { author: { contains: search, mode: "insensitive" as const } },
+        ],
+      }),
+    };
+    const [books, total] = await Promise.all([
+      prisma.book.findMany({
+        where,
+        include: { genre: true },
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * perPage,
+        take: perPage,
+      }),
+      prisma.book.count({ where }),
+    ]);
+    return { books, total, pages: Math.ceil(total / perPage) };
   },
   ["books-list"],
   { tags: ["books"], revalidate: 120 }
@@ -66,12 +78,20 @@ async function requireAuth() {
   return session;
 }
 
-export async function getAdminBooks(): Promise<BookWithGenre[]> {
+export type AdminBooksPage = { books: BookWithGenre[]; total: number; pages: number };
+
+export async function getAdminBooks(page = 1, perPage = 15): Promise<AdminBooksPage> {
   await requireAuth();
-  return prisma.book.findMany({
-    include: { genre: true },
-    orderBy: { createdAt: "desc" },
-  });
+  const [books, total] = await Promise.all([
+    prisma.book.findMany({
+      include: { genre: true },
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * perPage,
+      take: perPage,
+    }),
+    prisma.book.count(),
+  ]);
+  return { books, total, pages: Math.ceil(total / perPage) };
 }
 
 export async function getBookById(id: string): Promise<BookWithGenre | null> {

@@ -3,6 +3,7 @@ import { getBooks, getGenres } from "@/actions/books";
 import { BookGrid } from "@/components/books/book-grid";
 import { BookFilters } from "@/components/books/book-filters";
 import { SearchBar } from "@/components/shared/search-bar";
+import { Pagination } from "@/components/shared/pagination";
 
 export const revalidate = 3600;
 
@@ -12,13 +13,15 @@ export const metadata = {
 };
 
 interface HomePageProps {
-  searchParams: Promise<{ genre?: string; search?: string }>;
+  searchParams: Promise<{ genre?: string; search?: string; page?: string }>;
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const { genre, search } = await searchParams;
-  const [books, genres] = await Promise.all([
-    getBooks(genre, search),
+  const { genre, search, page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1") || 1);
+
+  const [{ books, total, pages }, genres] = await Promise.all([
+    getBooks(genre, search, page),
     getGenres(),
   ]);
 
@@ -33,13 +36,20 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           <SearchBar />
         </Suspense>
         <p className="text-xs text-ink-300 sm:ml-auto sm:self-center">
-          {books.length} {books.length === 1 ? "livro" : "livros"}
+          {total} {total === 1 ? "livro" : "livros"}
           {(genre || search) && " encontrados"}
         </p>
       </div>
 
       {/* Grid */}
-      <BookGrid books={books} animationKey={`${genre ?? ""}-${search ?? ""}`} />
+      <BookGrid books={books} animationKey={`${genre ?? ""}-${search ?? ""}-${page}`} />
+
+      {/* Paginação */}
+      {pages > 1 && (
+        <Suspense>
+          <Pagination currentPage={page} totalPages={pages} />
+        </Suspense>
+      )}
     </div>
   );
 }

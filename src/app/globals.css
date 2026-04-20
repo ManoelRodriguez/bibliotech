@@ -54,77 +54,80 @@ body {
 }
 
 /* ─── Dark Mode ─────────────────────────────────────────────────────────── */
+/*
+  Cores do padrão (frontend-pattern.md):
+  page-bg:       #111827   card-bg:    #1f2937
+  text-primary:  #f9fafb   text-sec:   #9ca3af   text-strong: #ffffff
+  border:        #374151   table-hover:#374151
+*/
 
 body.dark-mode {
-  background-color: #111827;
-  color: #f9fafb;
+  background-color: #111827 !important;
+  color: #f9fafb !important;
 }
 
-/* Superfícies brancas */
-body.dark-mode .bg-white                    { background-color: #1f2937; }
+/* ── Superfícies ── */
+body.dark-mode .bg-white              { background-color: #1f2937 !important; }
+body.dark-mode .bg-parchment-50       { background-color: #1e293b !important; }
+body.dark-mode .bg-parchment-100      { background-color: #374151 !important; }
+body.dark-mode .bg-parchment-200      { background-color: #374151 !important; }
+body.dark-mode .bg-leather-50         { background-color: #1e293b !important; }
 
-/* Parchment — superfícies */
-body.dark-mode .bg-parchment-50             { background-color: #1e293b; }
-body.dark-mode .bg-parchment-100            { background-color: #334155; }
-body.dark-mode .bg-parchment-200            { background-color: #475569; }
+/* ── Hover de superfícies ── */
+body.dark-mode .hover\:bg-parchment-50:hover  { background-color: #1e293b !important; }
+body.dark-mode .hover\:bg-parchment-100:hover { background-color: #374151 !important; }
+body.dark-mode .hover\:bg-leather-100:hover   { background-color: #374151 !important; }
 
-/* Parchment — hover */
-body.dark-mode .hover\:bg-parchment-50:hover  { background-color: #1e293b; }
-body.dark-mode .hover\:bg-parchment-100:hover { background-color: #334155; }
+/* ── Bordas ── */
+body.dark-mode .border-parchment-100  { border-color: #374151 !important; }
+body.dark-mode .border-parchment-200  { border-color: #374151 !important; }
+body.dark-mode .border-parchment-300  { border-color: #4b5563 !important; }
 
-/* Parchment — bordas */
-body.dark-mode .border-parchment-200        { border-color: #475569; }
-body.dark-mode .border-parchment-300        { border-color: #64748b; }
-body.dark-mode .border-parchment-100        { border-color: #334155; }
+/* ── Divisores ── */
+body.dark-mode .divide-parchment-100 > * + * { border-color: #374151 !important; }
 
-/* Parchment — divisores (divide-y usa border-color nos filhos) */
-body.dark-mode .divide-parchment-100 > * + * { border-color: #334155; }
+/* ── Textos ink (primários) ── */
+body.dark-mode .text-ink-900          { color: #f9fafb !important; }
+body.dark-mode .text-ink-700          { color: #f9fafb !important; }
+body.dark-mode .text-ink-500          { color: #9ca3af !important; }
+body.dark-mode .text-ink-400          { color: #9ca3af !important; }
+body.dark-mode .text-ink-300          { color: #6b7280 !important; }
 
-/* Ink — textos */
-body.dark-mode .text-ink-900               { color: #f9fafb; }
-body.dark-mode .text-ink-700               { color: #e5e7eb; }
-body.dark-mode .text-ink-500               { color: #9ca3af; }
-body.dark-mode .text-ink-400               { color: #9ca3af; }
-body.dark-mode .text-ink-300               { color: #6b7280; }
+/* ── Hover de textos ink ── */
+body.dark-mode .hover\:text-ink-700:hover { color: #ffffff !important; }
+body.dark-mode .hover\:text-ink-900:hover { color: #ffffff !important; }
 
-/* Ink — hover */
-body.dark-mode .hover\:text-ink-700:hover  { color: #e5e7eb; }
-body.dark-mode .hover\:text-ink-900:hover  { color: #f9fafb; }
+/* ── Textos parchment ── */
+body.dark-mode .text-parchment-400    { color: #9ca3af !important; }
+body.dark-mode .text-parchment-500    { color: #9ca3af !important; }
+body.dark-mode .text-parchment-700    { color: #e5e7eb !important; }
 
-/* Parchment — textos */
-body.dark-mode .text-parchment-500         { color: #94a3b8; }
-body.dark-mode .text-parchment-700         { color: #e2e8f0; }
+/* ── Textos/ícones leather (viram claros) ── */
+body.dark-mode .text-leather-600      { color: #e5e7eb !important; }
+body.dark-mode .text-leather-700      { color: #f9fafb !important; }
+body.dark-mode .hover\:text-leather-700:hover { color: #ffffff !important; }
 
-/* Leather — textos e ícones (viram claros no dark) */
-body.dark-mode .text-leather-600           { color: #e2e8f0; }
-body.dark-mode .text-leather-700           { color: #f1f5f9; }
-body.dark-mode .hover\:text-leather-700:hover { color: #f1f5f9; }
+/* ── Botões de ação primária (mantidos elevados no dark bg) ── */
+body.dark-mode .bg-leather-600        { background-color: #374151 !important; }
+body.dark-mode .hover\:bg-leather-700:hover { background-color: #4b5563 !important; }
 
-/* Leather — superfícies sutis */
-body.dark-mode .bg-leather-50              { background-color: #1e293b; }
-body.dark-mode .hover\:bg-leather-100:hover { background-color: #334155; }
-
-/* Leather — botões de ação primária (mantidos escuros/elevados) */
-body.dark-mode .bg-leather-600             { background-color: #374151; }
-body.dark-mode .hover\:bg-leather-700:hover { background-color: #4b5563; }
-
-/* Inputs e selects */
+/* ── Inputs, selects e textareas ── */
 body.dark-mode input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
 body.dark-mode textarea,
 body.dark-mode select {
-  background-color: #1f2937;
-  border-color: #475569;
-  color: #f9fafb;
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+  color: #f9fafb !important;
 }
 body.dark-mode input::placeholder,
-body.dark-mode textarea::placeholder { color: #6b7280; }
+body.dark-mode textarea::placeholder { color: #6b7280 !important; }
 
-/* Seção de anotações — amber (built-in, sem variável) */
-body.dark-mode .bg-amber-50                { background-color: #1c1400; }
-body.dark-mode .border-amber-200           { border-color: #78350f; }
-body.dark-mode .bg-amber-200               { background-color: #92400e; }
+/* ── Anotações pessoais (amber — built-in Tailwind) ── */
+body.dark-mode .bg-amber-50           { background-color: #1c1400 !important; }
+body.dark-mode .border-amber-200      { border-color: #78350f !important; }
+body.dark-mode .bg-amber-200          { background-color: #92400e !important; }
 
-/* Scrollbar */
-body.dark-mode ::-webkit-scrollbar-track  { background: #1f2937; }
-body.dark-mode ::-webkit-scrollbar-thumb  { background: #475569; }
-body.dark-mode ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+/* ── Scrollbar ── */
+body.dark-mode ::-webkit-scrollbar-track       { background: #1f2937; }
+body.dark-mode ::-webkit-scrollbar-thumb       { background: #374151; }
+body.dark-mode ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
