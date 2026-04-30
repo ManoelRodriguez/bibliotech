@@ -24,6 +24,7 @@ export function SearchBar() {
       } else {
         params.delete("search");
       }
+      params.delete("page");
       router.replace(`${pathname}?${params.toString()}`);
     },
     [router, pathname]

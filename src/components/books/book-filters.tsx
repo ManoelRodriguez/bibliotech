@@ -28,6 +28,7 @@ export function BookFilters({ genres }: BookFiltersProps) {
       } else {
         params.delete("genre");
       }
+      params.delete("page");
       router.replace(`${pathname}?${params.toString()}`);
     });
   }
